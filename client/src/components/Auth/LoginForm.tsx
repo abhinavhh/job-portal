@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {motion} from 'framer-motion'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface FormData {
     email: string,
@@ -11,7 +11,7 @@ const LoginForm: React.FC = () => {
         email: '',
         password: '',
     });
-
+    const [error, setError] = useState<string>('');
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -19,46 +19,56 @@ const LoginForm: React.FC = () => {
             [name]: value,
         }));
     };
+    const navigate = useNavigate();
+
+    const handleSubmit = async(e: React.FormEvent) => {
+        e.preventDefault();
+        try{
+            const result: any = await fetch('/auth/login',{
+                method: "POST",
+                headers: {
+                    'ContentType': 'application/json'
+                },
+                body:  JSON.stringify(formData)
+            });
+            if(!result.ok) {
+                const err = await result.json();
+                throw new Error(err.message ||'Login Failed');
+            }
+            alert('Login Successfull');
+            navigate('/profile');
+
+        }
+        catch ( err: any ) {
+            setError(err.message);
+        }
+    }
 
     return (
-        <section id= "login" className='min-h-screen flex'>
+        <motion.div
+            className='opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-16'
+        >
+            <h1 className='font-bold font-family-sans text-center py-8 '>Login</h1>
 
-            {/* Right side section */}
-            <div
-                className='hidden md:block w-full md:max-w-1/2 bg-bg_color relative'
+            <motion.form 
+                onSubmit={handleSubmit}
             >
-                
-                <h1 
-                    className='font-family-sans text-text_color font-extrabold text-4xl absolute top-[283px] left-1/2 transform -translate-x-1/2'
-                >
-                    Welcome
-                </h1>
-            </div>
 
-            {/* left side section */}
-            <div 
-                className='w-full md:max-w-1/2 flex justify-center items-center'
+            </motion.form>
+
+            <motion.div
+                className='flex justify-center font-family-sans font-medium text-sm'
             >
-                <motion.div
-                    className='opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-16'
-                >
-                    <h1 className='font-bold font-family-sans text-center py-8 '>Login</h1>
-
-                    <motion.div
-                        className='flex justify-center font-family-sans font-medium text-sm'
+                <p>Don't have no account ?{" "}
+                    <Link
+                        to="/register"
+                        className='underline underline-offset-2'
                     >
-                        <p>Don't have no account ?{" "}
-                            <Link
-                                to="/register"
-                                className='underline underline-offset-2'
-                            >
-                                Create Account
-                            </Link>
-                        </p>
-                    </motion.div>
-                </motion.div>
-            </div>
-        </section>
+                        Create Account
+                    </Link>
+                </p>
+            </motion.div>
+        </motion.div>
     );
 }
 
