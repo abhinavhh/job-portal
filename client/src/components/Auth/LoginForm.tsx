@@ -47,10 +47,14 @@ const LoginForm: React.FC = () => {
                     <motion.div
                         className='flex justify-center font-family-sans font-medium text-sm'
                     >
-                        <p>Don't have no account ?</p>
-                        <span>
-                            Create account
-                        </span>
+                        <p>Don't have no account ?{" "}
+                            <Link
+                                to="/register"
+                                className='underline underline-offset-2'
+                            >
+                                Create Account
+                            </Link>
+                        </p>
                     </motion.div>
                 </motion.div>
             </div>
