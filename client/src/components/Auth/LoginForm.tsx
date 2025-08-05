@@ -49,6 +49,7 @@ const LoginForm: React.FC = () => {
             className='opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-16'
         >
             <h1 className='font-bold font-family-sans text-center py-8 '>Login</h1>
+            {error && <p>{error}</p>}
 
             <motion.form 
                 onSubmit={handleSubmit}
