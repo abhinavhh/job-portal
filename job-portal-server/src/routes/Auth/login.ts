@@ -7,11 +7,10 @@ dotenv.config();
 
 const Loginrouter = express.Router();
 
-Loginrouter.post('/auth/login', async (req: Request, res: Response): Promise<void> => {
-    const { username, password } = req.body as { username: string; password: string };
-
+Loginrouter.post('/login', async (req: Request, res: Response): Promise<void> => {
+    const { email, password } = req.body as { email: string; password: string };
     try {
-        const user = await User.findOne({ username }).select('+password');
+        const user = await User.findOne({ email }).select('+password');
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -19,12 +18,12 @@ Loginrouter.post('/auth/login', async (req: Request, res: Response): Promise<voi
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            console.error('Invalid credentials for user:', username);
+            console.error('Invalid credentials for user:', email);
             res.status(401).json({ message: 'Invalid credentials' });
             return;
         }
 
-        console.log('User logged in successfully:', username);
+        console.log('User logged in successfully:', email);
 
         // Type assertion for JWT_SECRET
         const jwtSecret = process.env.JWT_SECRET as string;

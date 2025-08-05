@@ -63,7 +63,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <motion.div
-        className='text-center mb-4'
+        className='text-center mb-2'
     >
         <motion.button
             whileHover={{scale: 1.02, background:"#2650C0"}}

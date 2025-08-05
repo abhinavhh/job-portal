@@ -5,12 +5,16 @@ import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 
 interface FormData {
+    username: string,
     email: string,
+    phone: number,
     password: string,
 }
-const LoginForm: React.FC = () => {
+const SignUpForm: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
+        username: '',
         email: '',
+        phone: 0,
         password: '',
     });
     const [error, setError] = useState<string>('');
@@ -26,7 +30,7 @@ const LoginForm: React.FC = () => {
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
         try{
-            const result: any = await fetch('/api/login',{
+            const result: any = await fetch('/api/register',{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -37,10 +41,9 @@ const LoginForm: React.FC = () => {
                 const err = await result.json();
                 throw new Error(err.message ||'Login Failed');
             }
-            const token: string = await result.json().token;
-            localStorage.setItem('token', token);
-            alert('Login Successfull');
-            navigate('/profile');
+            const message = await result.json();
+            alert(`${message}`);
+            navigate('/login');
 
         }
         catch ( err: any ) {
@@ -50,10 +53,9 @@ const LoginForm: React.FC = () => {
 
     return (
         <motion.div
-
-            className='opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-14'
+            className='opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 max-w-[432px]'
         >
-            <h1 className='font-bold font-family-sans text-center py-6 text-base'>Login</h1>
+            <h1 className='font-bold font-family-sans text-center py-6 text-base mt-4'>Sign UP</h1>
             {error && <motion.p 
                 initial={{y:-20}}
                 animate={{y:0}}
@@ -63,16 +65,12 @@ const LoginForm: React.FC = () => {
                 onSubmit={handleSubmit}
                 className='flex flex-col items-center justify-center gap-y-1'
             >
-                <Input id="email" label='Email :' type='email' value={formData.email} name='email' placeholder='Enter Your Email' onChange={handleChange}/>
+                <Input id="username" label='User Name :' type='text' value={formData.username} name='username' placeholder='Enter Your Name' onChange={handleChange}/>
+                <Input id="email" label="Email :" type='email' value={formData.email} name="email" placeholder="Enter Your Email" onChange={handleChange}/>
+                <Input id="phone" label="Phone Number :" type='tel' value={formData.phone} name="phone" placeholder="Enter Your PhoneNumber" onChange={handleChange}/>
                 <Input id="password" label="Password :" type='password' value={formData.password} name="password" placeholder="Enter Your Password" onChange={handleChange}/>
 
-                <Link 
-                    to="/forgotPass"
-                    className='relative bottom-4 left-[6.5rem] font-family-sans font-normal text-[12px] underline underline-offset-3 hover:text-blue-600 mb-4'
-                >
-                    Forget Password
-                </Link>
-                 <Button variant='primary' size='md' isLoading={false} children="Login" />
+                 <Button variant='primary' size='md' isLoading={false} children="Sign Up" />
                 <motion.div
                     className='text-center bg-white font-family-sans font-normal rounded-lg w-[194px]'
                 >
@@ -83,14 +81,14 @@ const LoginForm: React.FC = () => {
 
             
             <motion.div
-                className='flex justify-center font-family-sans font-medium text-sm my-12'
+                className='flex justify-center font-family-sans font-medium text-sm mb-12 mt-8'
             >
-                <p>Don't have no account ?{" "}
+                <p>Already have account ?{" "}
                     <Link
-                        to="/register"
+                        to="/login"
                         className='underline underline-offset-2 hover:text-blue-600'
                     >
-                        Create Account
+                        Login
                     </Link>
                 </p>
             </motion.div>
@@ -98,4 +96,4 @@ const LoginForm: React.FC = () => {
     );
 }
 
-export default LoginForm
+export default SignUpForm;

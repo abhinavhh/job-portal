@@ -7,7 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     name: string;
     type: string;
-    value: string;
+    value: string | number;
     placeholder: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -24,16 +24,22 @@ const Input: React.FC<InputProps> = ({
     const inputId = id || `input-${name}`;
     return(
         <motion.div
-            whileFocus={{scale: 1.2}}
             className="mb-4 flex flex-col"
         >
-            <label 
+            <motion.label 
                 htmlFor={inputId}
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                transition={{duration: 0.9}}
                 className="relative font-semibold text-sm text-text_color_secondary left-1.5 bottom-0.3"
             >
                 {label}
-            </label>
-            <input 
+            </motion.label>
+            <motion.input 
+                whileHover={{scale: 1.02}}
+                initial={{y: 5, x: -5, opacity: 0}}
+                animate={{y: 0, x:0,opacity: 1}}
+                transition={{duration: 0.6}}
                 id={inputId} 
                 name={name}
                 type={type} 
