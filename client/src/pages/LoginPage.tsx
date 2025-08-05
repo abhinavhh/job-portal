@@ -11,7 +11,7 @@ const LoginPage = () => {
         >
             
             <h1 
-                className='font-family-sans text-text_color font-extrabold text-4xl absolute top-[283px] left-1/2 transform -translate-x-1/2'
+                className='font-family-sans text-text_color_primary font-extrabold text-4xl absolute top-[283px] left-1/2 transform -translate-x-1/2'
             >
                 Welcome
             </h1>

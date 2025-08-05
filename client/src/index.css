@@ -3,7 +3,9 @@
 @theme {
   --color-bg_color: #32589E;
   --color-bg_secondary: #F6F6F6;
-  --color-text_color: #FFFFFF;
+  --color-text_color_primary: #FFFFFF;
+  --color-text_color_secondary: #4D4D4D;
+  --color-text_color_tertiary: #9B9B9B;
 
   --font-family-sans: 'Inter', sans-serif;
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {motion} from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom';
+import Input from '../../ui/Input';
 
 interface FormData {
     email: string,
@@ -46,15 +47,23 @@ const LoginForm: React.FC = () => {
 
     return (
         <motion.div
-            className='opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-16'
+            className='opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-14'
         >
-            <h1 className='font-bold font-family-sans text-center py-8 '>Login</h1>
+            <h1 className='font-bold font-family-sans text-center py-6 text-base'>Login</h1>
             {error && <p>{error}</p>}
 
             <motion.form 
                 onSubmit={handleSubmit}
             >
+                <Input id="email" label='Email :' type='email' value={formData.email} name='email' placeholder='Enter Your Email'/>
+                <Input id="password" label="Password :" type='password' value={formData.password} name="password" placeholder="Enter Your Password"/>
 
+                <Link 
+                    to="/forgotPass"
+                    className='relative bottom-4 left-48 font-family-sans font-normal text-[12px] underline underline-offset-3 hover:text-blue-500'
+                >
+                    Forget Password
+                </Link>
             </motion.form>
 
             <motion.div

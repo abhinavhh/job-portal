@@ -8,6 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     name: string,
     type: string,
     value: string
+    placeholder: string
 }
 
 const Input: React.FC<InputProps> = ({
@@ -15,7 +16,8 @@ const Input: React.FC<InputProps> = ({
     label,
     name,
     type,
-    value
+    value,
+    placeholder
 }) => {
     const inputId = id || `input-${name}`;
     return(
@@ -24,15 +26,17 @@ const Input: React.FC<InputProps> = ({
         >
             <label 
                 htmlFor={inputId}
+                className="relative font-semibold text-sm text-text_color_secondary"
             >
                 {label}
             </label>
             <input 
                 id={inputId} 
                 type={type} 
-                value={value} 
+                value={value}
+                placeholder={placeholder}
+                className="w-full border-0 border-gray-300 bg-white rounded-[13px] px-6 py-4 font-family-sans shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] text-sm font-medium"
             />
-
         </motion.div>
     )
 };
