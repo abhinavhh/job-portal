@@ -7,11 +7,11 @@ const LoginPage = () => {
 
         {/* Left side section */}
         <div
-            className='hidden md:block w-full md:max-w-1/2 bg-bg_color relative'
+            className='hidden lg:block w-full lg:max-w-1/2 bg-bg_color relative'
         >
             
             <h1 
-                className='font-family-sans text-text_color_primary font-extrabold text-4xl absolute top-[283px] left-1/2 transform -translate-x-1/2'
+                className='font-family-sans text-text_color_primary font-extrabold text-4xl absolute top-[200px] left-1/2 transform -translate-x-1/2'
             >
                 Welcome
             </h1>
@@ -19,7 +19,7 @@ const LoginPage = () => {
 
         {/* right side section */}
         <div 
-            className='w-full md:max-w-1/2 flex justify-center items-center'
+            className='w-full flex justify-center items-center'
         >
             <LoginForm />
         </div>
