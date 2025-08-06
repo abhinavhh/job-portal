@@ -3,13 +3,20 @@ import React, { useState } from "react";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import ResetPasswordFrom from "./ResetPasswordFrom";
+import { useResetPassword } from "../../hooks/resetPassword";
+import { useNavigate } from "react-router-dom";
 
-const ForgetPasswordForm: React.FC = () => {
+interface ForgetPasswordFormProps {
+    onSuccess: () => void;
+}
+
+const ForgetPasswordForm: React.FC<ForgetPasswordFormProps> = ({onSuccess}) => {
     const [email, setEmail] = useState<string>('');
     const [error, setError] = useState<string>('');
-    const [resetPassword, setResetPassword] = useState<boolean>(false);
+    const {reset, toggleReset} = useResetPassword();
     const [verify, toggleVerify ] = useState<boolean>(false);
     const [otp, setOtp] = useState<string>('');
+    const navigate = useNavigate();
 
     const handleEmailSubmit = async (e:React.FormEvent) => {
         e.preventDefault();
@@ -49,7 +56,7 @@ const ForgetPasswordForm: React.FC = () => {
             if(response.ok) {
                 alert('OTP verification successfull');
                 toggleVerify(false);
-                setResetPassword(true);
+                toggleReset();
             }
             else{
                 alert('Verification Failed');
@@ -60,10 +67,14 @@ const ForgetPasswordForm: React.FC = () => {
             setError(err);
         }
     }
+
+    const handleResetSuccsess = () => {
+        onSuccess();
+    }
     return(
         <>
-            {resetPassword? (
-                <ResetPasswordFrom  email={email}/>
+            {reset? (
+                <ResetPasswordFrom  email={email} onSuccess={() => {toggleReset(); handleResetSuccsess(); navigate('/login'); { replace: true}}}/>
             ):
             (
                 <>

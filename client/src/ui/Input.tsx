@@ -47,6 +47,7 @@ const Input: React.FC<InputProps> = ({
                 placeholder={placeholder}
                 onChange={onChange}
                 className="w-[316px] h-[45px] border-0 border-gray-300 bg-white rounded-[13px] px-6 py-3 font-family-sans shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] text-sm font-medium"
+                required
             />
         </motion.div>
     )

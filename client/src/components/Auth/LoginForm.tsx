@@ -64,7 +64,7 @@ const LoginForm: React.FC = () => {
   return (
     <motion.div className="opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-14">
       {toggleForget ? (
-        <ForgetPasswordForm />
+        <ForgetPasswordForm onSuccess={() => {setToggleForget(false); navigate('/login', { replace : true });}} />
       ) : (
         <>
           <h1 className="font-bold font-family-sans text-center py-6 text-base">Login</h1>

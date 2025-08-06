@@ -3,16 +3,17 @@ import { motion } from 'framer-motion'
 import React, { useState } from 'react'
 import Button from '../../ui/Button';
 import { useNavigate } from 'react-router-dom';
-
+import { useResetPassword } from '../../hooks/resetPassword';
 
 interface ChildProps {
     email: string;
+    onSuccess: () => void,
 }
 interface FormDTO {
     password: string;
     confirmPassword: string;
 }
-const ResetPasswordFrom = ({email}: ChildProps) => {
+const ResetPasswordFrom = ({email, onSuccess}: ChildProps) => {
     const navigate = useNavigate();
     const [error, setError] = useState<string>();
     const [formData, setFormData] = useState<FormDTO>({
@@ -32,10 +33,14 @@ const ResetPasswordFrom = ({email}: ChildProps) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({formData, email}),
+                body: JSON.stringify({password: formData.password, email: email}),
             })
             if(response.ok){
-                navigate('/login');
+                alert('Password Reset Success');
+                onSuccess();
+            }
+            else{
+                alert('Error');
             }
         }
         catch ( err: any ) {
@@ -52,7 +57,7 @@ const ResetPasswordFrom = ({email}: ChildProps) => {
     }
     return (
         <>
-            <h1 className="font-bold font-family-sans text-center py-6 text-base">Login</h1>
+            <h1 className="font-bold font-family-sans text-center py-6 text-base">Reset Password</h1>
 
             {error && (
             <motion.p
@@ -69,7 +74,7 @@ const ResetPasswordFrom = ({email}: ChildProps) => {
             >
                     <>
                         <Input id="password" name="password" type="password" placeholder="Enter New Password" value={formData.password} label="Password :" onChange={handleChange}/>
-                        <Input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" value={formData.password} label="Confirm Password :" onChange={handleChange}/>
+                        <Input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" value={formData.confirmPassword} label="Confirm Password :" onChange={handleChange}/>
                         <Button type="submit" children="Reset Password"/>
                     </>
             </motion.form>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useValidate } from "../hooks/ValidateToken";
 import { useEffect } from "react";
 
@@ -17,6 +18,9 @@ const HomePage = () => {
   return (
     <div>HomePage
       <button onClick={handleClick}>LogOut</button>
+      <Link to="/profile" className="border-1 p-2 ml-2 rounded-xl ">
+        View User Profile
+      </Link>
     </div>
     
   );
