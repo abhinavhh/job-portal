@@ -9,6 +9,7 @@ const ForgetPasswordForm: React.FC = () => {
     const [error, setError] = useState<string>('');
     const [resetPassword, setResetPassword] = useState<boolean>(false);
     const [verify, toggleVerify ] = useState<boolean>(false);
+    const [otp, setOtp] = useState<string>('');
 
     const handleEmailSubmit = async (e:React.FormEvent) => {
         e.preventDefault();
@@ -22,6 +23,7 @@ const ForgetPasswordForm: React.FC = () => {
             });
             const data = await response.json();
             if(response.ok){
+                alert('Otp Send');
                 toggleVerify(true);
             }
             else{
@@ -33,10 +35,35 @@ const ForgetPasswordForm: React.FC = () => {
         }
     }
 
+    const handleOtpSubmit = async(e:React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/verify-otp',{
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({otp, email})
+            });
+            const data = await response.json();
+            if(response.ok) {
+                alert('OTP verification successfull');
+                toggleVerify(false);
+                setResetPassword(true);
+            }
+            else{
+                alert('Verification Failed');
+                setError(data.error);
+            }
+        }
+        catch ( err: any) {
+            setError(err);
+        }
+    }
     return(
         <>
             {resetPassword? (
-                <ResetPasswordFrom />
+                <ResetPasswordFrom  email={email}/>
             ):
             (
                 <>
@@ -45,28 +72,32 @@ const ForgetPasswordForm: React.FC = () => {
                         initial={{y:-20}}
                         animate={{y:0}}
                         className='text-center text-red-700 mb-2 p-2 rounded-lg border-1 font-family-sans font-bold  border-red-300 '>{error}
-                    </motion.p>}  
-                    <motion.form 
-                        onSubmit={handleEmailSubmit}
-                        className='flex flex-col items-center justify-center gap-y-1'
-                    >
-                        {verify? (
-                            <>
-                                <Input id="email" name="email" type="email" placeholder="Enter Your Email" value={email} label="Email :" onChange={(e) => setEmail(e.target.value)}/>
-                                <Button type="submit" children="Generate OTP"/>
-                            </>
-                        ):
-                            (
+                    </motion.p>}
+
+                    {verify? (
+                        <motion.form 
+                            onSubmit={handleOtpSubmit}
+                            className='flex flex-col items-center justify-center gap-y-1'
+                        >
+                                <>
+                                    <Input id="otp" name="otp" type="text" placeholder="Enter The OTP" value={otp} label="OTP :" onChange={(e) => setOtp(e.target.value)}/>
+                                    <Button type="submit" children="Verify OTP"/>
+                                </>
+                        </motion.form>
+                        
+                    ): (
+                        <motion.form 
+                            onSubmit={handleEmailSubmit}
+                            className='flex flex-col items-center justify-center gap-y-1'
+                        >
                                 <>
                                     <Input id="email" name="email" type="email" placeholder="Enter Your Email" value={email} label="Email :" onChange={(e) => setEmail(e.target.value)}/>
                                     <Button type="submit" children="Generate OTP"/>
                                 </>
-                            )
-                        }
-                    </motion.form>
+                        </motion.form>
+                    )}       
                 </>
-            )}
-            
+            )} 
         </>
     )
 }

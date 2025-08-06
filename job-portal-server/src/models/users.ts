@@ -7,6 +7,8 @@ interface IUser {
   email: string;
   password: string;
   role: 'User' | 'Admin';
+  otp?: string;
+  otpExpires?: Date;
 }
 
 // 2. Extend with instance methods like `comparePassword`
@@ -44,6 +46,14 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema<IUserDocument>(
       enum: ['User', 'Admin'],
       default: 'User',
     },
+    otp: {
+      type: String,
+      required: false,
+    },
+    otpExpires: {
+      type: Date,
+      required: false,
+    }
   },
   { timestamps: true }
 );

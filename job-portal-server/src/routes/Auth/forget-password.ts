@@ -20,7 +20,11 @@ ForgetPassRouter.post('/forget-password', async (req: Request, res: Response): P
         else {
             // Generate OTP
             const otp = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log(otp);
+
+            const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+            user.otp = otp;
+            user.otpExpires = otpExpires;
+            await user.save();
             // write logic to send OTP to user's email
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -29,7 +33,6 @@ ForgetPassRouter.post('/forget-password', async (req: Request, res: Response): P
                     pass: process.env.EMAIL_PASS
                 }
             });
-            console.log(process.env.EMAIL_USER);
 
             const mailOptions = {
                 from: process.env.EMAIL_USER,
