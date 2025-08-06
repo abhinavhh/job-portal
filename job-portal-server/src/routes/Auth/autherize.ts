@@ -12,7 +12,6 @@ declare global {
 }
 
 authRouter.get('/authorization', authenticateToken, (req: Request, res: Response) => {
-    console.log('User authorized:', req.user);
     res.status(200).json({ message: 'Access granted', user: req.user });
 });
 
