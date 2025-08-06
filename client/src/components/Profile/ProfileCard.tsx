@@ -1,8 +1,52 @@
 import { motion } from 'framer-motion';
 import profileImage from '../../assets/eb25ecae5527abd630d85ffa7f99f2fdd42589c5.jpg';
 import editpenImage from '../../assets/285100becb670a4cbd2e0b54cba28a41e0aab5ff.png';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+interface UserProfile {
+  username: string;
+  // lastName: string;
+  email: string;
+  phone: string;
+  portfolioLink: string;
+  socialLink: string;
+}
 
 const ProfileCard = () => {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+
+      if (!userId || !token) {
+        alert('You must be logged in to view profile details.');
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/profile/details',{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.json();
+        setUser(result.data);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+        alert('Failed to fetch user details. Please login again.');
+        localStorage.removeItem('userId');
+        navigate('/login');
+      }
+    };
+
+    fetchUserProfile();
+  }, [navigate]);
+
   return (
     <motion.div 
       className="shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] w-full max-w-[310px] flex flex-col gap-16 rounded-lg p-4 bg-white"
@@ -46,7 +90,7 @@ const ProfileCard = () => {
         />
         
         <motion.div 
-          className="text-center font-semibold text-xl"
+          className="text-center font-semibold text-xl flex flex-col"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.4 }}
@@ -56,10 +100,10 @@ const ProfileCard = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.3 }}
           >
-            John Doe
+            {user ? `${user.username}` : 'Loading...'}
           </motion.h1>
           <motion.a 
-            href="#" 
+            href={`mailto:${user?.email || ''}`} 
             className="block text-sm"
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -69,7 +113,7 @@ const ProfileCard = () => {
               transition: { duration: 0.2 }
             }}
           >
-            johndoe@gmail.com
+            {user?.email}
           </motion.a>
           <motion.p 
             className="text-sm"
@@ -77,10 +121,12 @@ const ProfileCard = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.8, duration: 0.3 }}
           >
-            999999999
+            {user?.phone}
           </motion.p>
           <motion.a 
-            href="#" 
+            href={user?.portfolioLink || '#'} 
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-sm"
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -90,10 +136,12 @@ const ProfileCard = () => {
               transition: { duration: 0.2 }
             }}
           >
-            portfolio link
+            Portfolio
           </motion.a>
           <motion.a 
-            href="#" 
+            href={user?.socialLink || '#'} 
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-sm"
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -103,7 +151,7 @@ const ProfileCard = () => {
               transition: { duration: 0.2 }
             }}
           >
-            social link
+            Social
           </motion.a>
         </motion.div>
       </motion.div>
@@ -154,6 +202,12 @@ const ProfileCard = () => {
             boxShadow: "0 4px 12px rgba(255, 8, 8, 0.3)"
           }}
           whileTap={{ scale: 0.98 }}
+          onClick={() => {
+            localStorage.removeItem('userId');
+            localStorage.removeItem('token');
+            alert('Log Out Successfull')
+            navigate('/login');
+          }}
         >
           Logout
         </motion.button>

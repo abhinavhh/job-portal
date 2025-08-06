@@ -9,10 +9,11 @@ interface RegisterRequestBody {
   email: string;
   phone: number;
   password: string;
+  userRole: string;
 }
 
 registerRouter.post('/register', async (req: Request<{}, {}, RegisterRequestBody>, res: Response): Promise<void> => {
-  const { username, email, phone, password } = req.body;
+  const { username, email, phone, password, userRole } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -27,6 +28,7 @@ registerRouter.post('/register', async (req: Request<{}, {}, RegisterRequestBody
       email,
       phone,
       password,
+      userRole,
     });
 
     await newUser.save();

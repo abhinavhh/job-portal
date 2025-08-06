@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 import User from '../../models/users'; // adjust the path based on your structure
 import authenticateToken from '../../config/validateToken';
 
-const router = express.Router();
+const profileUpdateRouter = express.Router();
 
 // Update Profile Route (Protected)
-router.put('/update', authenticateToken, async (req: Request, res: Response) => {
+profileUpdateRouter.put('/profile/update', authenticateToken, async (req: Request, res: Response) => {
   try {
     const userId = req.user.id; // Set by the authentication middleware
 
@@ -54,4 +54,4 @@ router.put('/update', authenticateToken, async (req: Request, res: Response) => 
   }
 });
 
-export default router;
+export default profileUpdateRouter;

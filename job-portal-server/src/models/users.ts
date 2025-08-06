@@ -62,7 +62,7 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema<IUserDocument>(
     },
     role: {
       type: String,
-      enum: ['User', 'Admin'],
+      enum: ['Job Seeker', 'Admin', 'Employer'],
       default: 'User',
     },
     otp: {

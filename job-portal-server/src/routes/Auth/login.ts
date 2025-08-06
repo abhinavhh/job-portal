@@ -29,7 +29,7 @@ Loginrouter.post('/login', async (req: Request, res: Response): Promise<void> =>
         const jwtSecret = process.env.JWT_SECRET as string;
 
         const token = jwt.sign(
-            { username: user.username, role: user.role },
+            { id: user._id, username: user.username, role: user.role },
             jwtSecret,
             { expiresIn: '1h' }
         );
