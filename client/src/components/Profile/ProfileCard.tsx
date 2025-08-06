@@ -158,7 +158,7 @@ const ProfileCard = () => {
 
       {/* Action Buttons */}
       <motion.div 
-        className="flex flex-col gap-3 mt-6"
+        className="flex flex-col gap-3 mt-6 items-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
@@ -192,7 +192,7 @@ const ProfileCard = () => {
         </motion.button>
         
         <motion.button 
-          className="bg-[#FF0808] rounded-3xl py-2 text-white font-normal text-xs w-full"
+          className="bg-[#FF0808] rounded-3xl py-2 text-white font-normal text-xs  w-[130px]"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.3, duration: 0.4 }}
