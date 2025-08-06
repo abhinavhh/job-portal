@@ -11,8 +11,14 @@ const HomePage = () => {
     }
   }, [isAuthenticated]);
 
+  const handleClick = () => {
+    localStorage.removeItem('userId')
+  }
   return (
-    <div>HomePage</div>
+    <div>HomePage
+      <button onClick={handleClick}>LogOut</button>
+    </div>
+    
   );
 };
 

@@ -34,7 +34,7 @@ Loginrouter.post('/login', async (req: Request, res: Response): Promise<void> =>
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: 'Login successful', token, id: user._id });
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Internal server error' });
