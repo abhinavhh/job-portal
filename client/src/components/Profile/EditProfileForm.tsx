@@ -266,7 +266,7 @@ const ProfileUpdateForm: React.FC = () => {
         <div className="flex justify-center font-medium text-[16px]">
           <button
             type="button"
-            onClick={addEducation}
+            onClick={addExperience}
             className="px-4 py-2 bg-white hover:bg-blue-600 transition-colors flex items-center gap-2"
           >
             <img src={addImg} alt="addImg" width={25}/>
@@ -299,7 +299,7 @@ const ProfileUpdateForm: React.FC = () => {
         <div className="flex justify-center font-medium text-[16px]">
           <button
             type="button"
-            onClick={addEducation}
+            onClick={addSkill}
             className="px-4 py-2 bg-white hover:bg-blue-600 transition-colors flex items-center gap-2"
           >
             <img src={addImg} alt="addImg" width={25}/>
