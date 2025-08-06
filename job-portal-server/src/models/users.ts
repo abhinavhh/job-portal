@@ -1,7 +1,23 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-// 1. Define user properties (excluding methods)
+// 1. Define subdocument interfaces
+interface IEducation {
+  collegeName: string;
+  startYear: number;
+  endYear: number;
+  subjects: string[];
+  achievements: string[];
+}
+
+interface IExperience {
+  companyName: string;
+  position: string;
+  startYear: number;
+  endYear: number;
+  achievements: string[];
+}
+
 interface IUser {
   username: string;
   email: string;
@@ -9,9 +25,12 @@ interface IUser {
   role: 'User' | 'Admin';
   otp?: string;
   otpExpires?: Date;
+  education?: IEducation[];
+  experience?: IExperience[];
+  skills?: string[];
 }
 
-// 2. Extend with instance methods like `comparePassword`
+// 2. Extend with instance methods
 export interface IUserDocument extends IUser, Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
@@ -48,17 +67,36 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema<IUserDocument>(
     },
     otp: {
       type: String,
-      required: false,
     },
     otpExpires: {
       type: Date,
-      required: false,
-    }
+    },
+
+    // --- Profile-specific fields ---
+    education: [
+      {
+        collegeName: { type: String, required: true },
+        startYear: { type: Number, required: true },
+        endYear: { type: Number, required: true },
+        subjects: [{ type: String }],
+        achievements: [{ type: String }],
+      },
+    ],
+    experience: [
+      {
+        companyName: { type: String, required: true },
+        position: { type: String, required: true },
+        startYear: { type: Number, required: true },
+        endYear: { type: Number, required: true },
+        achievements: [{ type: String }],
+      },
+    ],
+    skills: [{ type: String }],
   },
   { timestamps: true }
 );
 
-// 4. Pre-save middleware to hash password
+// 4. Password hashing middleware
 userSchema.pre<IUserDocument>('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -74,7 +112,7 @@ userSchema.pre<IUserDocument>('save', async function (next) {
   }
 });
 
-// 5. Instance method to compare password
+// 5. Password comparison method
 userSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
@@ -86,6 +124,6 @@ userSchema.methods.comparePassword = async function (
   }
 };
 
-// 6. Create and export the model
+// 6. Model export
 const User: Model<IUserDocument> = mongoose.model<IUserDocument>('User', userSchema);
 export default User;
