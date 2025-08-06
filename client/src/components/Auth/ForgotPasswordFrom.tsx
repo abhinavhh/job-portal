@@ -8,8 +8,9 @@ const ForgetPasswordForm: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [resetPassword, setResetPassword] = useState<boolean>(false);
+    const [verify, toggleVerify ] = useState<boolean>(false);
 
-    const handleSubmit = async (e:React.FormEvent) => {
+    const handleEmailSubmit = async (e:React.FormEvent) => {
         e.preventDefault();
         try{
             const response = await fetch('/api/forget-password', {
@@ -17,11 +18,11 @@ const ForgetPasswordForm: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body:JSON.stringify(email),
+                body:JSON.stringify({email}),
             });
             const data = await response.json();
             if(response.ok){
-                setResetPassword(true);
+                toggleVerify(true);
             }
             else{
                 setError(data.error);
@@ -46,11 +47,22 @@ const ForgetPasswordForm: React.FC = () => {
                         className='text-center text-red-700 mb-2 p-2 rounded-lg border-1 font-family-sans font-bold  border-red-300 '>{error}
                     </motion.p>}  
                     <motion.form 
-                        onSubmit={handleSubmit}
+                        onSubmit={handleEmailSubmit}
                         className='flex flex-col items-center justify-center gap-y-1'
                     >
-                        <Input id="email" name="email" type="email" placeholder="Enter Your Email" value={email} label="Email :" onChange={(e) => setEmail(e.target.value)}/>
-                        <Button type="submit" children="Get OTP"/>
+                        {verify? (
+                            <>
+                                <Input id="email" name="email" type="email" placeholder="Enter Your Email" value={email} label="Email :" onChange={(e) => setEmail(e.target.value)}/>
+                                <Button type="submit" children="Generate OTP"/>
+                            </>
+                        ):
+                            (
+                                <>
+                                    <Input id="email" name="email" type="email" placeholder="Enter Your Email" value={email} label="Email :" onChange={(e) => setEmail(e.target.value)}/>
+                                    <Button type="submit" children="Generate OTP"/>
+                                </>
+                            )
+                        }
                     </motion.form>
                 </>
             )}
