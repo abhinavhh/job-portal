@@ -5,6 +5,7 @@ import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import googleIcon from '../../assets/icons8-google-36.png';
 import ForgetPasswordForm from './ForgotPasswordFrom';
+import { toast } from 'react-toastify';
 
 interface FormData {
   email: string;
@@ -53,8 +54,7 @@ const LoginForm: React.FC = () => {
 
       localStorage.setItem('userId', data._id);
       localStorage.setItem('token', data.token);
-
-      alert('Login Successful');
+      toast.success('Login Successfull');
       navigate('/profile');
     } catch (err: any) {
       setError(err.message);
