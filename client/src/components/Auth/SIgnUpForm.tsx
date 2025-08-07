@@ -127,7 +127,6 @@ const SignUpForm: React.FC = () => {
                         <option value=''>Select a role</option>
                         <option value='Job Seeker'>Job Seeker</option>
                         <option value='Employer'>Employer</option>
-                        <option value='Admin'>Admin</option>
                     </select>
                 </motion.div>
 

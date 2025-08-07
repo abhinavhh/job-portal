@@ -3,6 +3,7 @@ import profileImage from '../../assets/eb25ecae5527abd630d85ffa7f99f2fdd42589c5.
 import editpenImage from '../../assets/285100becb670a4cbd2e0b54cba28a41e0aab5ff.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface UserProfile {
   username: string;
@@ -205,7 +206,7 @@ const ProfileCard = () => {
           onClick={() => {
             localStorage.removeItem('userId');
             localStorage.removeItem('token');
-            alert('Log Out Successfull')
+            toast.success('Successfully Loged Out');
             navigate('/login');
           }}
         >
