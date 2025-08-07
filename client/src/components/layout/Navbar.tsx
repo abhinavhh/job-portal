@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState } from "react";
+import { useState } from "react";
 import logoImage from '../../assets/9756455b49a2c1e44c02cff2091cb354bb3936be.png';
 import searchImg from '../../assets/a05bd508d6985084c6282bc5096b45f2cf361948.png';
 import { Menu, X } from "lucide-react";
