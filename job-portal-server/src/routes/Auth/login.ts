@@ -9,35 +9,58 @@ const Loginrouter = express.Router();
 
 Loginrouter.post('/login', async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body as { email: string; password: string };
+
+    // Check for missing credentials
+    if (!email || !password) {
+        res.status(400).json({ message: 'Email and password are required.' });
+        return;
+    }
+
     try {
         const user = await User.findOne({ email }).select('+password');
+
+        // User not found
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
+            res.status(404).json({ message: 'No account found with this email address.' });
             return;
         }
 
         const isMatch = await user.comparePassword(password);
+
+        // Password mismatch
         if (!isMatch) {
-            console.error('Invalid credentials for user:', email);
-            res.status(401).json({ message: 'Invalid credentials' });
+            res.status(401).json({ message: 'Incorrect password. Please try again.' });
             return;
         }
 
-        console.log('User logged in successfully:', email);
-
-        // Type assertion for JWT_SECRET
-        const jwtSecret = process.env.JWT_SECRET as string;
+        // JWT secret must exist
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            res.status(500).json({ message: 'JWT secret is not configured on the server.' });
+            return;
+        }
 
         const token = jwt.sign(
-            { id: user._id, username: user.username, role: user.role },
+            {
+                id: user._id,
+                username: user.username,
+                role: user.role
+            },
             jwtSecret,
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ message: 'Login successful', token, id: user._id });
+        res.status(200).json({
+            message: 'Login successful.',
+            token,
+            id: user._id,
+            username: user.username,
+            role: user.role,
+        });
+
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'An unexpected error occurred while processing your login. Please try again later.' });
     }
 });
 

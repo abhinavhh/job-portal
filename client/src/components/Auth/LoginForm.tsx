@@ -5,7 +5,7 @@ import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import googleIcon from '../../assets/icons8-google-36.png';
 import ForgetPasswordForm from './ForgotPasswordFrom';
-import { toast } from 'react-toastify';
+import { Bounce, Slide, toast } from 'react-toastify';
 
 interface FormData {
   email: string;
@@ -18,7 +18,6 @@ const LoginForm: React.FC = () => {
     password: '',
   });
 
-  const [error, setError] = useState<string>('');
   const [toggleForget, setToggleForget] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -28,6 +27,11 @@ const LoginForm: React.FC = () => {
       navigate('/profile');
     }
   }, [navigate]);
+
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,45 +43,75 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      toast.error('Both email and password are required.', {
+        position: 'top-center',
+        autoClose: 3000,
+        transition: Slide,
+      });
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      toast.error('Please enter a valid email address.', {
+        position: 'top-center',
+        autoClose: 3000,
+        transition: Slide,
+      });
+      return;
+    }
+
     try {
-      const result = await fetch('/api/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const data = await result.json();
+      const data = await response.json();
 
-      if (!result.ok) {
-        throw new Error(data.message || 'Login Failed');
+      if (!response.ok) {
+        toast.error(data?.message || 'Login failed. Please try again.', {
+          position: 'top-center',
+          autoClose: 3000,
+          transition: Slide,
+        });
+        return;
       }
 
-      localStorage.setItem('userId', data._id);
+      toast.success(data?.message || 'Login Successful', {
+        position: 'top-center',
+        autoClose: 2000,
+        theme: 'light',
+        transition: Bounce,
+      });
+
+      localStorage.setItem('userId', data.id);
       localStorage.setItem('token', data.token);
-      toast.success('Login Successfull');
+
       navigate('/profile');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      toast.error('Something went wrong. Please try again later.', {
+        position: 'top-center',
+        autoClose: 3000,
+        transition: Slide,
+      });
     }
   };
 
   return (
     <motion.div className="opacity-100 bg-bg_secondary shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl px-12 py-14">
       {toggleForget ? (
-        <ForgetPasswordForm onSuccess={() => {setToggleForget(false); navigate('/login', { replace : true });}} />
+        <ForgetPasswordForm
+          onSuccess={() => {
+            setToggleForget(false);
+            navigate('/login', { replace: true });
+          }}
+        />
       ) : (
         <>
           <h1 className="font-bold font-family-sans text-center py-6 text-base">Login</h1>
-
-          {error && (
-            <motion.p
-              initial={{ y: -20 }}
-              animate={{ y: 0 }}
-              className="text-center text-red-700 mb-2 p-2 rounded-lg border-1 font-family-sans font-bold border-red-300"
-            >
-              {error}
-            </motion.p>
-          )}
 
           <motion.form onSubmit={handleSubmit} className="flex flex-col items-center justify-center gap-y-1">
             <Input
