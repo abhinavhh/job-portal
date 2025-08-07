@@ -54,7 +54,7 @@ const SignUpForm: React.FC = () => {
                 throw new Error(err.message || 'Registration Failed');
             }
             const message = await result.json();
-            alert(`${message}`);
+            alert('User Registration Successful');
             navigate('/login');
         } catch (err: any) {
             setError(err.message);

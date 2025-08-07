@@ -21,8 +21,9 @@ interface IExperience {
 interface IUser {
   username: string;
   email: string;
+  phone: string;
   password: string;
-  role: 'User' | 'Admin';
+  role: 'Job Seeker' | 'Admin' | 'Employer';
   otp?: string;
   otpExpires?: Date;
   education?: IEducation[];
@@ -53,6 +54,12 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema<IUserDocument>(
       match: /.+\@.+\..+/,
       lowercase: true,
     },
+    phone: {
+      type: String,
+      required: true,
+      minLength: 10,
+      maxLength: 15,
+    },
     password: {
       type: String,
       required: true,
@@ -63,7 +70,7 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema<IUserDocument>(
     role: {
       type: String,
       enum: ['Job Seeker', 'Admin', 'Employer'],
-      default: 'User',
+      default: 'Job Seeker',
     },
     otp: {
       type: String,
@@ -75,19 +82,19 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema<IUserDocument>(
     // --- Profile-specific fields ---
     education: [
       {
-        collegeName: { type: String, required: true },
-        startYear: { type: Number, required: true },
-        endYear: { type: Number, required: true },
+        collegeName: { type: String },
+        startYear: { type: Number },
+        endYear: { type: Number },
         subjects: [{ type: String }],
         achievements: [{ type: String }],
       },
     ],
     experience: [
       {
-        companyName: { type: String, required: true },
-        position: { type: String, required: true },
-        startYear: { type: Number, required: true },
-        endYear: { type: Number, required: true },
+        companyName: { type: String },
+        position: { type: String },
+        startYear: { type: Number },
+        endYear: { type: Number },
         achievements: [{ type: String }],
       },
     ],

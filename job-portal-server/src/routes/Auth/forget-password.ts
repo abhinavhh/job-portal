@@ -9,7 +9,6 @@ const ForgetPassRouter = express.Router();
 
 ForgetPassRouter.post('/forget-password', async (req: Request, res: Response): Promise<void> => {
     const { email } = req.body as { email: string };
-    console.log(email);
     try {
 
         const user = await User.findOne({ email});
@@ -50,6 +49,7 @@ ForgetPassRouter.post('/forget-password', async (req: Request, res: Response): P
     }
     catch (error: any) {
         res.status(500).json({error: 'Internal Server Error'});
+        console.log(error);
     }
 })
 export default ForgetPassRouter;

@@ -1,3 +1,4 @@
+import Footer from '../components/layout/Footer';
 import Navbar from '../components/layout/Navbar';
 import ProfileCard from '../components/Profile/ProfileCard';
 import ProfileDetails from '../components/Profile/ProfileDetails';
@@ -10,6 +11,7 @@ const Profile = () => {
         <ProfileCard />
         <ProfileDetails />
       </div>
+      <Footer/>
     </>
   );
 };

@@ -17,8 +17,8 @@ const Navbar = () => {
         </motion.div>
 
         {/* Desktop Nav Links + Search */}
-        <motion.div className="flex items-center space-x-16">
-          <motion.div className="hidden md:flex items-center gap-10">
+        <motion.div className="flex items-center space-x-10 lg:space-x-50">
+          <motion.div className="hidden md:flex items-center gap-10 lg:gap-36">
             {/* Nav Links */}
             <div className="flex items-center space-x-10">
               {["Home", "Jobs"].map((item) => (

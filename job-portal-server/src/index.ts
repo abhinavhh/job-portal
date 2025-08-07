@@ -26,7 +26,7 @@ app.use('/api', ForgetPassRouter);
 app.use('/api', VerifyOtpRouter);
 app.use('/api', resetPasswordRouter);
 app.use('/api', profileUpdateRouter);
-app.use('/api', getProfileRouter);
+// app.use('/api', getProfileRouter);
 app.use('/api', getUserDetailsRouter);
 
 app.listen(PORT, () => {

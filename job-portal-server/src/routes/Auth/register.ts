@@ -7,7 +7,7 @@ const registerRouter = express.Router();
 interface RegisterRequestBody {
   username: string;
   email: string;
-  phone: number;
+  phone: string;
   password: string;
   userRole: string;
 }
